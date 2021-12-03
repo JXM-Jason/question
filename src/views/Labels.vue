@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <layout>
     labels
-    <Nav></Nav>
-  </div>
+    <p>jxm</p>
+  </layout>
 </template>
 
 <script>

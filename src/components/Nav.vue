@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <router-link to="/Money">Money</router-link> |
-    <router-link to="/Labels">Labels</router-link>|
-    <router-link to="/Statistics">Statistics</router-link>
+  <div class="nav">
+    <router-link to="/Labels">标签</router-link>|
+    <router-link to="/Money">记一笔</router-link> |
+    <router-link to="/Statistics">统计</router-link>
   </div>
 </template>
 
@@ -11,4 +11,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.nav {
+  border: 1px solid red;
+}
 </style>
