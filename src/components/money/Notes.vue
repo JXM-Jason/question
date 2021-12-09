@@ -23,23 +23,22 @@ export default class Notes extends vue {
 <style lang="scss" scoped>
 .notes {
   // border: 1px solid blue;
-  flex-grow: 1;
-  background-color: #f5f5f5;
   display: flex;
   align-items: center;
+  background-color: #f5f5f5;
+  font-size: 16px;
+  padding-left: 16px;
   span {
-    margin: 0 16px 0 16px;
+    padding-right: 16px;
   }
   input {
-    // height: 22px;
-    // height: 64px;
+    height: 64px;
     flex-grow: 1;
     border: none;
-    font-size: 14px;
     color: #999999;
     background-color: #f5f5f5;
-    margin-right: 16px;
-    // padding: 20px 0;
+    padding-right: 16px;
+    font-size: 16px;
   }
 }
 </style>

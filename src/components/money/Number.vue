@@ -23,9 +23,10 @@
 <script lang="ts">
 import vue from "vue";
 import Component from "vue-class-component";
-import { Watch } from "vue-property-decorator";
+import { Prop, Watch } from "vue-property-decorator";
 @Component
 export default class Number extends vue {
+  @Prop(Array) oneTag!: string[];
   output = "0";
   inputContent(event: MouseEvent) {
     const buttontext = (event.target as HTMLButtonElement).textContent!;
@@ -52,80 +53,20 @@ export default class Number extends vue {
     this.output = "0";
   }
   ok() {
-    this.$emit("update:value", this.output);
+    if (this.oneTag.length > 0) {
+      this.$emit("update:value", this.output);
+      this.$emit("submit", this.output);
+    } else {
+      alert("请至少选择一个标签！");
+    }
+    this.output = "0";
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
-// .number {
-//   // border: 1px solid purple;
-//   flex-grow: 5;
-//   position: relative;
-//   .output {
-//     // border: 1px solid purple;
-//     padding: 18px 0;
-//     text-align: right;
-//     margin-right: 10px;
-//     font-size: 18px;
-//   }
-//   .buttons {
-//     position: absolute;
-//     @extend %clearfix;
-//     button {
-//       width: 25%;
-//       height: 50px;
-//       line-height: 50px;
-//       font-size: 18px;
-//       border: none;
-//       background: transparent;
-//       // &.ok {
-//       //   float: right;
-//       //   width: 75px;
-//       //   height: 100px;
-//       // }
-//       // &.zero {
-//       //   width: 150px;
-//       //   height: 50px;
-//       // }
-//       $bg: #f2f2f2;
-//       &:nth-child(1) {
-//         background: $bg;
-//       }
-//       &:nth-child(2),
-//       &:nth-child(6) {
-//         background: darken($bg, 4%);
-//       }
-//       &:nth-child(3),
-//       &:nth-child(7),
-//       &:nth-child(11) {
-//         background: darken($bg, 4 * 2%);
-//       }
-//       &:nth-child(4),
-//       &:nth-child(8),
-//       &:nth-child(12),
-//       &:nth-child(16) {
-//         background: darken($bg, 4 * 3%);
-//       }
-//       &:nth-child(5),
-//       &:nth-child(9),
-//       &:nth-child(13),
-//       &:nth-child(17) {
-//         background: darken($bg, 4 * 4%);
-//       }
-//       &:nth-child(10),
-//       &:nth-child(14),
-//       &:nth-child(18) {
-//         background: darken($bg, 4 * 5%);
-//       }
-//       &:nth-child(15),
-//       &:nth-child(19) {
-//         background: darken($bg, 4 * 6%);
-//       }
-//     }
-//   }
-// }
+
 .number {
   .output {
     @extend %clearfix;

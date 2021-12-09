@@ -29,13 +29,14 @@ export default class Types extends vue {
 <style lang="scss" scoped>
 .type {
   // border: 1px solid green;
-  flex-grow: 1;
   display: flex;
+
   button {
     background-color: #c4c4c4;
-    flex-grow: 1;
+    width: 50%;
+    height: 64px;
     border: none;
-    font-size: 22px;
+    font-size: 24px;
     position: relative;
     &.selected::after {
       content: "";

@@ -46,17 +46,15 @@ export default class Tags extends vue {
 <style lang="scss" scoped>
 .tags {
   // border: 1px solid red;
-  flex-grow: 4;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   ul {
     // border: 1px solid blue;
     display: flex;
-    align-content: flex-end;
+    // align-content: flex-end;
     flex-wrap: wrap;
-    flex-grow: 1;
-
     li {
       // border: 1px solid gray;
       $bg: #d9d9d9;
@@ -66,7 +64,7 @@ export default class Tags extends vue {
       line-height: $h;
       border-radius: $h/2;
       padding: 0 16px;
-      margin: 2px 5px 2px 16px;
+      margin: 4px 5px 2px 16px;
       &.selected {
         background: darken($bg, 50%);
         color: white;
