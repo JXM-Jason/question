@@ -12,14 +12,14 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-.nav-wrapper {
-  border: 1px solid green;
-  display: flex;
-  flex-direction: column;
-}
+// .nav-wrapper {
+//   border: 1px solid green;
+// }
 .content {
   height: 100vh;
   overflow: auto;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 </style>
