@@ -25,6 +25,7 @@ nav {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
   font-size: 12px;
   padding: 2px 0 0 0;
+  background-color: #fff;
   > .link {
     display: flex;
     flex-direction: column;

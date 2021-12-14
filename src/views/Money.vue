@@ -1,9 +1,13 @@
 <template>
   <layout class="layout1">
-    <!-- {{ record }} -->
-    {{ recordList }}
+    {{ record }}
+    <!-- {{ recordList }} -->
     <Tags :data-source.sync="tags" @update:value="onUpdateTags" />
-    <Notes @update:value="onUpdateNotes" />
+    <Notes
+      fieldname="备注"
+      placeholder="在这里添加备注"
+      @update:value="onUpdateNotes"
+    />
     <Type :value.sync="record.type" />
     <Number
       @update:value="onUpdateNumber"
@@ -21,23 +25,35 @@ import Notes from "../components/money/Notes.vue";
 import Type from "../components/money/Type.vue";
 import Number from "../components/money/Number.vue";
 import { Watch } from "vue-property-decorator";
-type Record = {
-  tags: string[];
-  notes: string;
-  type: string;
-  number: number;
-  createdAt?: Date;
-};
-const recordList: Record[] = JSON.parse(
-  window.localStorage.getItem("recordList") || "[]"
-);
+import recordListModel from "../models/recordListModels";
+import tagListModel from "../models/tagListModels";
+// type RecordItem = {
+//   tags: string[];
+//   notes: string;
+//   type: string;
+//   number: number;
+//   createdAt?: Date;
+// };
+
+const recordList = recordListModel.fetch();
+// const tagList = tagListModel.data;
+// const tagList = window.tagList;
 @Component({
   components: { Tags, Notes, Type, Number },
 })
 export default class Money extends vue {
-  tags: string[] = ["衣", "食", "住", "行", "彩票"];
-  record: Record = { tags: [], notes: "", type: "-", number: 0 };
-  recordList: Record[] = [];
+  record = { tags: [], notes: "", type: "-", number: 0 };
+  recordList = recordList;
+  // listdata = tagListModel.data.map((t) => t.name);
+  // tags = this.listdata;
+  tags = window.tagList;
+
+  // @Watch("tags")
+  // watchTags() {
+  //   // tagListModel.data = this.tags;
+  //   console.log(this.tags);
+  //   tagListModel.save();
+  // }
   onUpdateTags(tag: string[]) {
     this.record.tags = tag;
   }
@@ -48,13 +64,12 @@ export default class Money extends vue {
     this.record.number = parseFloat(output);
   }
   saveRecord() {
-    const record2 = JSON.parse(JSON.stringify(this.record));
-    record2.createdAt = new Date();
-    this.recordList.push(record2);
+    recordListModel.create(this.record);
   }
   @Watch("recordList")
   onRecordListUpdate() {
-    window.localStorage.setItem("recordList", JSON.stringify(this.recordList));
+    // window.localStorage.setItem("recordList", JSON.stringify(this.recordList));
+    recordListModel.save();
   }
 }
 </script>
@@ -63,6 +78,7 @@ export default class Money extends vue {
 .layout1 {
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 }
 </style>
 

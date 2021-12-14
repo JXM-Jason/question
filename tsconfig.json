@@ -15,8 +15,8 @@
     "types": [
       "webpack-env",
       "jest"
-     
     ],
+    "typeRoots": ["/src"],
     "paths": {
       "@/*": [
         "src/*"
@@ -31,10 +31,12 @@
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
+
   ],
   "exclude": [
     "node_modules"

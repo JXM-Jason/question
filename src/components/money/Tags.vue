@@ -3,11 +3,11 @@
     <ul>
       <li
         v-for="item in dataSource"
-        :key="item"
+        :key="item.id"
         @click="selected(item)"
         :class="{ selected: selectTags.indexOf(item) >= 0 }"
       >
-        {{ item }}
+        {{ item.name }}
       </li>
     </ul>
     <div>
@@ -34,8 +34,10 @@ export default class Tags extends vue {
   }
   addTags() {
     const Tagname = window.prompt("请输入新的标签名！");
-    if (Tagname === null) {
+    if (Tagname === "") {
       alert("标签名不能为空！");
+    } else if (Tagname === null) {
+      return;
     } else if (this.dataSource) {
       this.$emit("update:dataSource", [...this.dataSource, Tagname]);
     }
@@ -50,6 +52,7 @@ export default class Tags extends vue {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  // background-color: #fff;
   ul {
     // border: 1px solid blue;
     display: flex;
