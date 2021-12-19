@@ -6,12 +6,10 @@
       </router-link>
       <span> 编辑标签 </span>
     </div>
-    <!-- <div class="labelName">
-      <span> 标签名&nbsp; &nbsp;{{ "jxm" }}</span>
-    </div> -->
+
     <div class="labelName">
       <Notes
-        :value="tag.name"
+        :value="currentTag.name"
         fieldname="标签名"
         placeholder="请输入标签名"
         @update:value="onUpdateTagname"
@@ -25,39 +23,36 @@
 import vue from "vue";
 import { Component } from "vue-property-decorator";
 import Notes from "../components/money/Notes.vue";
-import tagListModel from "../models/tagListModels";
-@Component({ components: { Notes } })
+// import store from "../store/index";
+@Component({
+  components: { Notes },
+})
 export default class EditLabel extends vue {
-  tag: { id: string; name: string } = { id: "", name: "" };
   $route: any;
   $router: any;
+  get currentTag() {
+    return this.$store.state.currentTag;
+  }
   created() {
     const id = this.$route.params.id;
-    console.log("id");
-    console.log(id);
-
-    tagListModel.fetch();
-    const tags = tagListModel.data;
-    const tag = tags.filter((t) => t.id === id)[0];
-    if (tag) {
-      this.tag = tag;
-      console.log(this.tag);
-    } else {
+    this.$store.commit("fetchTags");
+    this.$store.commit("setcurrentTag", id);
+    if (!this.currentTag) {
       this.$router.replace("/404");
     }
   }
   onUpdateTagname(name: string) {
-    if (this.tag) {
-      tagListModel.update(this.tag.id, name);
+
+    if (this.currentTag) {
+      this.$store.commit("updateTag", { id: this.currentTag.id, name });
     }
   }
   DeleteNewTag() {
-    if (this.tag) {
-      if (tagListModel.remove(this.tag.id)) {
-        this.$router.back();
-      } else {
-        window.alert("删除失败");
-      }
+    if (this.currentTag) {
+      this.$store.commit("removeTag", this.currentTag.id);
+      this.$router.back();
+    } else {
+      window.alert("删除失败");
     }
   }
   goBack() {

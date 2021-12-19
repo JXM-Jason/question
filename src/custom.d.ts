@@ -18,12 +18,15 @@ type TagListModel = {
   remove: (id: string) => boolean;
   save: () => void;
 };
-// declare global {
-//   interface Window {
-//     tagList: Tag[];
-//   }
-// }
 // interface Window {
-//   tagList: Tag[];
+// tagList: Tag[];
+// createTag: (name: string) => void;
+// removeTag: (name: string) => boolean;
+// updateTag: (
+//   id: string,
+//   name: string
+// ) => "success" | "duplicated" | "not found";
+// findTag: (name: string) => void;
+// recordList: RecordItem[];
+// createRecord: (record: RecordItem) => void;
 // }
-(window as any).tagList;

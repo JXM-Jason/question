@@ -2,7 +2,7 @@
   <div class="tags">
     <ul>
       <li
-        v-for="item in dataSource"
+        v-for="item in tagList"
         :key="item.id"
         @click="selected(item)"
         :class="{ selected: selectTags.indexOf(item) >= 0 }"
@@ -19,9 +19,22 @@
 <script lang="ts">
 import vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-@Component
+// import store from "../../store/index";
+@Component({
+  // computed: {
+  //   tagList() {
+  //     return this.$store.state.tagList;
+  //   },
+  // },
+})
 export default class Tags extends vue {
-  @Prop(Array) dataSource: string[] | undefined;
+  // tagList = store.fetchTags();
+  get tagList() {
+    return this.$store.state.tagList;
+  }
+  created() {
+    this.$store.commit("fetchTags");
+  }
   selectTags: string[] = [];
   selected(tag: string) {
     const index = this.selectTags.indexOf(tag);
@@ -34,13 +47,7 @@ export default class Tags extends vue {
   }
   addTags() {
     const Tagname = window.prompt("请输入新的标签名！");
-    if (Tagname === "") {
-      alert("标签名不能为空！");
-    } else if (Tagname === null) {
-      return;
-    } else if (this.dataSource) {
-      this.$emit("update:dataSource", [...this.dataSource, Tagname]);
-    }
+    this.$store.commit("createTag", Tagname);
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <layout class="layout1">
     {{ record }}
     <!-- {{ recordList }} -->
-    <Tags :data-source.sync="tags" @update:value="onUpdateTags" />
+    <Tags @update:value="onUpdateTags" />
     <Notes
       fieldname="备注"
       placeholder="在这里添加备注"
@@ -19,41 +19,29 @@
 
 <script lang="ts">
 import vue from "vue";
-import Component from "vue-class-component";
 import Tags from "../components/money/Tags.vue";
 import Notes from "../components/money/Notes.vue";
 import Type from "../components/money/Type.vue";
 import Number from "../components/money/Number.vue";
-import { Watch } from "vue-property-decorator";
-import recordListModel from "../models/recordListModels";
-import tagListModel from "../models/tagListModels";
-// type RecordItem = {
-//   tags: string[];
-//   notes: string;
-//   type: string;
-//   number: number;
-//   createdAt?: Date;
-// };
+import { Component } from "vue-property-decorator";
+// import store from "../store/index";
 
-const recordList = recordListModel.fetch();
-// const tagList = tagListModel.data;
-// const tagList = window.tagList;
 @Component({
   components: { Tags, Notes, Type, Number },
+  computed: {
+    recordList() {
+      return this.$store.state.recordList;
+    },
+    tagList() {
+      return this.$store.state.tagList;
+    },
+  },
 })
 export default class Money extends vue {
   record = { tags: [], notes: "", type: "-", number: 0 };
-  recordList = recordList;
-  // listdata = tagListModel.data.map((t) => t.name);
-  // tags = this.listdata;
-  tags = window.tagList;
-
-  // @Watch("tags")
-  // watchTags() {
-  //   // tagListModel.data = this.tags;
-  //   console.log(this.tags);
-  //   tagListModel.save();
-  // }
+  created() {
+    this.$store.commit("fetchRecords");
+  }
   onUpdateTags(tag: string[]) {
     this.record.tags = tag;
   }
@@ -64,12 +52,7 @@ export default class Money extends vue {
     this.record.number = parseFloat(output);
   }
   saveRecord() {
-    recordListModel.create(this.record);
-  }
-  @Watch("recordList")
-  onRecordListUpdate() {
-    // window.localStorage.setItem("recordList", JSON.stringify(this.recordList));
-    recordListModel.save();
+    this.$store.commit("createRecord", this.record);
   }
 }
 </script>

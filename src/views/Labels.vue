@@ -3,7 +3,7 @@
     <div class="tags">
       <router-link
         class="link"
-        v-for="tag in tags"
+        v-for="tag in tagList"
         :key="tag.id"
         :to="`/Labels/EditLabel/${tag.id}`"
       >
@@ -24,27 +24,27 @@
 <script lang="ts">
 import vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import tagListModel from "../models/tagListModels";
-tagListModel.fetch();
+import store from "../store/index";
+@Component({
+  computed: {
+    tagList() {
+      return this.$store.state.tagList;
+    },
+  },
+})
 export default class Labels extends vue {
-  tags = window.tagList;
-  @Watch("tags")
-  watchTags() {
-    console.log("jxm");
-    console.log(this.tags);
+  created() {
+    this.$store.commit("fetchTags");
   }
+  // tags = this.$store.state.tagList;
+  // @Watch("tags")
+  // watchTags() {
+  //   console.log("jxm");
+  //   console.log(this.tags);
+  // }
   CreateNewTag() {
     const Tagname = window.prompt("请输入标签名！");
-    if (Tagname === "") {
-      alert("标签名不能为空!");
-    } else if (Tagname === null) {
-      return;
-    } else {
-      const message = tagListModel.create(Tagname);
-      if (message === "duplicated") {
-        window.alert("你输入的标签名重复了！");
-      }
-    }
+    this.$store.commit("createTag", Tagname);
   }
 }
 </script>

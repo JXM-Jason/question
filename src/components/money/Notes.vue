@@ -5,7 +5,8 @@
       type="text"
       :value="value"
       :placeholder="placeholder"
-      @input="onValueChange($event.target.value)"
+      @compositionstart="flag = false"
+      @compositionend="onValueChange($event.target.value)"
     />
   </label>
 </template>
@@ -21,6 +22,10 @@ export default class Notes extends vue {
   @Prop(String) placeholder?: string;
 
   onValueChange(value: string) {
+    console.log("我是value");
+
+    console.log(value);
+
     this.$emit("update:value", value);
   }
 }

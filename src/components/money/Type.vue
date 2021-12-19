@@ -11,8 +11,7 @@
 
 <script lang="ts">
 import vue from "vue";
-import Component from "vue-class-component";
-import { Prop, Watch } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 
 @Component
 export default class Types extends vue {
