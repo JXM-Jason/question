@@ -1,11 +1,13 @@
 <template>
   <div class="type">
-    <button :class="value === '-' && 'selected'" @click="changeType('-')">
-      支出
-    </button>
-    <button :class="value === '+' && 'selected'" @click="changeType('+')">
-      收入
-    </button>
+    <ul>
+      <li :class="value === '-' && 'selected'" @click="changeType('-')">
+        支出
+      </li>
+      <li :class="value === '+' && 'selected'" @click="changeType('+')">
+        收入
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -27,11 +29,14 @@ export default class Types extends vue {
 
 <style lang="scss" scoped>
 .type {
-  // border: 1px solid green;
-  display: flex;
-
-  button {
+  ul {
+    display: flex;
     background-color: #c4c4c4;
+    text-align: center;
+    line-height: 64px;
+  }
+
+  li {
     width: 50%;
     height: 64px;
     border: none;

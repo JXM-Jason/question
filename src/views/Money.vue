@@ -8,7 +8,7 @@
       placeholder="在这里添加备注"
       @update:value="onUpdateNotes"
     />
-    <Type :value.sync="record.type" />
+    <Tabs :datasource="recordTypeList" :value.sync="record.type" />
     <Number
       @update:value="onUpdateNumber"
       :oneTag="record.tags"
@@ -19,15 +19,16 @@
 
 <script lang="ts">
 import vue from "vue";
+import Tabs from "../components/Tabs.vue";
 import Tags from "../components/money/Tags.vue";
 import Notes from "../components/money/Notes.vue";
 import Type from "../components/money/Type.vue";
 import Number from "../components/money/Number.vue";
 import { Component } from "vue-property-decorator";
-// import store from "../store/index";
+import typeList from "../constants/typeList";
 
 @Component({
-  components: { Tags, Notes, Type, Number },
+  components: { Tabs, Notes, Tags, Number },
   computed: {
     recordList() {
       return this.$store.state.recordList;
@@ -39,6 +40,7 @@ import { Component } from "vue-property-decorator";
 })
 export default class Money extends vue {
   record = { tags: [], notes: "", type: "-", number: 0 };
+  recordTypeList = typeList;
   created() {
     this.$store.commit("fetchRecords");
   }
