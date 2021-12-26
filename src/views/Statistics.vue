@@ -51,15 +51,6 @@ export default class Statistics extends vue {
   // intervalList = intervalList;
   recordTypeList = typeList;
   todyTime = new Date().toISOString();
-  // @Watch("todyTime")
-  // onUpdateTime(newtime, oldtime) {
-  //   console.log("old");
-  //   console.log(oldtime);
-  //   console.log("new");
-  //   console.log(newtime);
-  //   console.log("todyTime");
-  //   console.log(this.todyTime);
-  // }
   tagsString(tags: Tag[]) {
     return tags.map((t) => t.name).join("，");
     // return tags.join(",");
@@ -77,7 +68,7 @@ export default class Statistics extends vue {
     const newList = clone(this.recordList)
       .filter((t) => t.type === this.type)
       .sort((a, b) => {
-        dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
+        return dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
       });
 
     type Result = {
