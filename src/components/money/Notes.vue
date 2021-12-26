@@ -1,17 +1,28 @@
 <template>
   <label class="notes">
     <span>{{ this.fieldname }}</span>
-    <input
-      type="text"
-      :value="value"
-      :placeholder="placeholder"
-      @compositionstart="flag = false"
-      @compositionend="onValueChange($event.target.value)"
-    />
+    <template v-if="type === 'date'">
+      <input
+        :type="type || 'text'"
+        :value="Timestring(value)"
+        :placeholder="placeholder"
+        @compositionstart="flag = false"
+        @input="onValueChange($event.target.value)"
+      />
+    </template>
+    <template v-else>
+      <input
+        :type="type || 'text'"
+        :value="value"
+        :placeholder="placeholder"
+        @change="onValueChange($event.target.value)"
+      />
+    </template>
   </label>
 </template>
 
 <script lang="ts">
+import dayjs from "dayjs";
 import vue from "vue";
 import { Watch, Prop, Component } from "vue-property-decorator";
 
@@ -20,12 +31,18 @@ export default class Notes extends vue {
   @Prop({ default: "" }) readonly value!: string;
   @Prop(String) fieldname!: string;
   @Prop(String) placeholder?: string;
+  @Prop(String) type?: string;
 
+  Timestring(time: string) {
+    // console.log("1");
+    // console.log(dayjs(time).valueOf());
+    // console.log("2");
+    // console.log(dayjs(time).format("YYYY-MM-DD").valueOf());
+    // console.log("3");
+
+    return dayjs(time).format("YYYY-MM-DD");
+  }
   onValueChange(value: string) {
-    console.log("我是value");
-
-    console.log(value);
-
     this.$emit("update:value", value);
   }
 }

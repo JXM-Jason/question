@@ -20,7 +20,7 @@ type DataSourceItem = { text: string; value: string };
 @Component
 export default class Tabs extends vue {
   @Prop(String) classPrefix?: string;
-  @Prop({ required: true, type: Array }) datasource: DataSourceItem;
+  @Prop({ required: true, type: Array }) datasource!: DataSourceItem;
   @Prop(String) readonly value!: string;
   selected(item: DataSourceItem) {
     this.$emit("update:value", item.value);

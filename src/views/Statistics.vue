@@ -1,11 +1,32 @@
 <template>
   <layout>
     <Tabs classPrefix="types" :datasource="recordTypeList" :value.sync="type" />
-    <Tabs
-      classPrefix="interval"
-      :datasource="intervalList"
-      :value.sync="interval"
-    />
+
+    <div v-if="this.groupedList.length > 0">
+      <Notes type="date" class="dateChoose" :value.sync="todyTime" />
+      <ul>
+        <li>+收入</li>
+        <li>-支出</li>
+      </ul>
+      <Mycharts :recordData="this.groupedList" :nowTime.sync="todyTime" />
+    </div>
+
+    <div v-else class="Norecord">目前没有记录</div>
+    <ul v-if="this.groupedList.length > 0">
+      <li v-for="(group, index) in groupedList" :key="index">
+        <ol>
+          <h3 class="title">
+            {{ beautify(group.title) }} <span>{{ group.total }}</span>
+          </h3>
+          <li v-for="item in group.items" :key="item.id" class="record">
+            <span>{{ tagsString(item.tags) }}</span>
+            <span class="notes">{{ item.notes }}</span>
+            <span>{{ "￥" + item.number }}</span>
+          </li>
+        </ol>
+      </li>
+    </ul>
+    <div v-else class="Norecord">目前没有记录</div>
   </layout>
 </template>
 
@@ -13,17 +34,103 @@
 import vue from "vue";
 import Type from "../components/money/Type.vue";
 import Tabs from "../components/Tabs.vue";
-import { Component } from "vue-property-decorator";
+import Notes from "../components/money/Notes.vue";
+import { Component, Watch } from "vue-property-decorator";
 import intervalList from "../constants/intervalList";
 import typeList from "../constants/typeList";
+import dayjs from "dayjs";
+import clone from "../lib/clone";
+import Mycharts from "../components/Mycharts.vue";
+
 @Component({
-  components: { Type, Tabs },
+  components: { Type, Tabs, Mycharts, Notes },
 })
 export default class Statistics extends vue {
   type = "-";
   interval = "day";
-  intervalList = intervalList;
+  // intervalList = intervalList;
   recordTypeList = typeList;
+  todyTime = new Date().toISOString();
+  // @Watch("todyTime")
+  // onUpdateTime(newtime, oldtime) {
+  //   console.log("old");
+  //   console.log(oldtime);
+  //   console.log("new");
+  //   console.log(newtime);
+  //   console.log("todyTime");
+  //   console.log(this.todyTime);
+  // }
+  tagsString(tags: Tag[]) {
+    return tags.map((t) => t.name).join("，");
+    // return tags.join(",");
+  }
+  beforeCreate() {
+    this.$store.commit("fetchRecords");
+  }
+  get recordList() {
+    return (this.$store.state as RootState).recordList;
+  }
+  get groupedList() {
+    if (this.recordList.length === 0) {
+      return [];
+    }
+    const newList = clone(this.recordList)
+      .filter((t) => t.type === this.type)
+      .sort((a, b) => {
+        dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
+      });
+
+    type Result = {
+      title: string;
+      total?: number;
+      items: RecordItem[];
+    }[];
+    if (newList.length === 0) {
+      return [];
+    }
+    const result: Result = [
+      {
+        title: dayjs(newList[0].createdAt).format("YYYY-MM-DD"),
+        total: 0,
+        items: [newList[0]],
+      },
+    ];
+    for (let i = 1; i < newList.length; i++) {
+      const last = result[result.length - 1];
+      const current = newList[i];
+      if (dayjs(last.title).isSame(dayjs(current.createdAt), "day")) {
+        last.items.push(current);
+      } else {
+        result.push({
+          title: dayjs(current.createdAt).format("YYYY-MM-DD"),
+          total: 0,
+          items: [current],
+        });
+      }
+    }
+    // console.log(result);
+
+    result.map((group) => {
+      group.total = group.items.reduce((sum, item) => sum + item.number, 0);
+    });
+    return result;
+  }
+  beautify(stringTime: string) {
+    const day = dayjs(stringTime);
+    const now = dayjs();
+    // console.log(now);
+    if (day.isSame(now, "day")) {
+      return "今天";
+    } else if (day.isSame(now.subtract(1, "day"), "day")) {
+      return "昨天";
+    } else if (day.isSame(now.subtract(2, "day"), "day")) {
+      return "前天";
+    } else if (day.isSame(now, "year")) {
+      return day.format("M月D日");
+    } else {
+      return day.format("YYYY年M月D日");
+    }
+  }
 }
 </script>
 
@@ -31,6 +138,32 @@ export default class Statistics extends vue {
 ::v-deep .tabs > .interval-item {
   height: 48px;
   line-height: 48px;
+}
+.Norecord {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%);
+  font-size: 22px;
+}
+%item {
+  padding: 8px 16px;
+  line-height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+.title {
+  @extend %item;
+}
+.record {
+  background: white;
+  @extend %item;
+}
+.notes {
+  margin-right: auto;
+  margin-left: 16px;
+  color: #999;
 }
 </style>
 

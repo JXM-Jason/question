@@ -1,15 +1,10 @@
 import clone from "@/lib/clone";
 import createID from "@/lib/createID";
+import dayjs from "dayjs";
 import Vue from "vue";
 import Vuex from "vuex";
-
 Vue.use(Vuex);
 
-type RootState = {
-  recordList: RecordItem[];
-  tagList: Tag[];
-  currentTag?: Tag;
-};
 const store = new Vuex.Store({
   state: {
     recordList: [],
@@ -32,7 +27,14 @@ const store = new Vuex.Store({
     },
     createRecord(state, record) {
       const record2: RecordItem = clone(record);
-      record2.createdAt = new Date();
+      console.log("jxm");
+
+      console.log(record2.createdAt);
+      console.log(dayjs(record2.createdAt).format("YYYY-MM-DD"));
+
+      record2.createdAt =
+        dayjs(record2.createdAt).format("YYYY-MM-DD") ||
+        new Date().toISOString();
       state.recordList.push(record2);
       store.commit("saveRecords");
     },
@@ -80,7 +82,7 @@ const store = new Vuex.Store({
       if (idList.indexOf(id) >= 0) {
         const names = state.tagList.map((item: any) => item.name);
         if (names.indexOf(name) >= 0) {
-          window.alert("标签名重复了");
+          window.alert("标签名重复了！");
         } else {
           const tag: any = state.tagList.filter(
             (item: any) => item.id === id
