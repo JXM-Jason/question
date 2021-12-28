@@ -22,9 +22,11 @@ export default class Tabs extends vue {
   @Prop(String) classPrefix?: string;
   @Prop({ required: true, type: Array }) datasource!: DataSourceItem;
   @Prop(String) readonly value!: string;
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   selected(item: DataSourceItem) {
     this.$emit("update:value", item.value);
   }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   liClass(item: DataSourceItem) {
     return {
       [this.classPrefix + "-item"]: this.classPrefix,

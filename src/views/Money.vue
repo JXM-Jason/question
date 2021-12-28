@@ -1,21 +1,23 @@
 <template>
   <layout class="layout1">
-    {{ record }}
-    <!-- {{ recordList }} -->
-    <Tags @update:value="onUpdateTags" />
+    <Tabs :datasource="recordTypeList" :value.sync="record.type" />
+    <!-- {{ record }} -->
+    <Tags @update:value="onUpdateTags" :Type.sync="record.type" />
 
     <Notes
       fieldname="备注"
       placeholder="在这里添加备注"
       :value.sync="record.notes"
+      class="notes"
     />
     <Notes
       fieldname="日期"
       placeholder="在这里添加备注"
       :value.sync="record.createdAt"
       type="date"
+      class="notes"
     />
-    <Tabs :datasource="recordTypeList" :value.sync="record.type" />
+
     <Number
       @update:value="onUpdateNumber"
       :oneTag="record.tags"
@@ -61,6 +63,9 @@ export default class Money extends vue {
     // console.log("money");
 
     // console.log(this.record.createdAt);
+    console.log("测试record");
+
+    console.log(this.record.type);
 
     this.$store.commit("fetchRecords");
   }
@@ -88,6 +93,15 @@ export default class Money extends vue {
   display: flex;
   flex-direction: column;
   background-color: #fff;
+}
+.notes {
+  // border: 1px solid red;
+  height: 40px;
+  ::v-deep input {
+    height: 40px;
+    font-size: 14px;
+    color: rgb(44, 43, 43);
+  }
 }
 </style>
 

@@ -14,6 +14,12 @@
         placeholder="请输入标签名"
         @update:value="onUpdateTagname"
       />
+      <!-- <Notes
+        :value="currentTag.type"
+        fieldname="标签类型"
+        placeholder="请输入标签类型"
+        @update:value="onUpdateTagType"
+      /> -->
     </div>
     <button class="deleteButton" @click="DeleteNewTag">删除标签</button>
   </layout>
@@ -24,6 +30,7 @@ import vue from "vue";
 import { Component } from "vue-property-decorator";
 import Notes from "../components/money/Notes.vue";
 // import store from "../store/index";
+//  @update:value="onUpdateTagType(this.currentTag.name, type)"
 @Component({
   components: { Notes },
 })
@@ -42,11 +49,21 @@ export default class EditLabel extends vue {
     }
   }
   onUpdateTagname(name: string) {
-
     if (this.currentTag) {
       this.$store.commit("updateTag", { id: this.currentTag.id, name });
     }
   }
+  // onUpdateTagType(type: string) {
+  //   if (type === "-" || type === "+") {
+  //     this.$store.commit("updateTag", {
+  //       id: this.currentTag.id,
+  //       name: this.currentTag.name,
+  //       type: type,
+  //     });
+  //   } else {
+  //     alert("请输入-或+，其余无效");
+  //   }
+  // }
   DeleteNewTag() {
     if (this.currentTag) {
       this.$store.commit("removeTag", this.currentTag.id);
@@ -55,6 +72,13 @@ export default class EditLabel extends vue {
       window.alert("删除失败");
     }
   }
+  // Typechange(value: string) {
+  //   if (value === "-") {
+  //     return "支出";
+  //   } else {
+  //     return "收入";
+  //   }
+  // }
   goBack() {
     this.$router.back();
   }

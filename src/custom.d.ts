@@ -13,6 +13,7 @@ interface RecordItem {
 interface Tag {
   id: string;
   name: string;
+  type?: string;
 }
 
 // type TagListModel = {

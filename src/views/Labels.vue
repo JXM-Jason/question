@@ -44,7 +44,17 @@ export default class Labels extends vue {
   // }
   CreateNewTag() {
     const Tagname = window.prompt("请输入标签名！");
-    this.$store.commit("createTag", Tagname);
+    let TagType = window.prompt("请输入标签类型，支出或收入");
+    if (TagType === "支出" || TagType === "收入") {
+      if (TagType === "支出") {
+        TagType = "-";
+      } else {
+        TagType = "+";
+      }
+      this.$store.commit("createTag", [Tagname, TagType]);
+    } else {
+      alert("请重新输入类型，支出或收入！");
+    }
   }
 }
 </script>

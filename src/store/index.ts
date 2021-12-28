@@ -45,7 +45,7 @@ const store = new Vuex.Store({
       );
       return state.tagList;
     },
-    createTag(state, name: string) {
+    createTag(state, [name, type]) {
       const names = state.tagList.map((t: { name: string }) => t.name);
       if (names.indexOf(name) >= 0) {
         window.alert("标签名重复了");
@@ -55,7 +55,7 @@ const store = new Vuex.Store({
         return;
       } else {
         const id = createID().toString();
-        state.tagList.push({ id: id, name: name });
+        state.tagList.push({ id: id, name: name, type: type });
         store.commit("saveTags");
         window.alert("添加成功");
       }
@@ -88,6 +88,7 @@ const store = new Vuex.Store({
             (item: any) => item.id === id
           )[0];
           tag.name = name;
+          // tag.type = type;
           store.commit("saveTags");
         }
       }

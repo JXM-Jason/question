@@ -4,15 +4,19 @@
 
     <div v-if="this.groupedList.length > 0">
       <Notes type="date" class="dateChoose" :value.sync="todyTime" />
-      <ul>
-        <li>+收入</li>
-        <li>-支出</li>
+      <ul class="incomeAndspending">
+        <li class="green">-支出</li>
+        <li class="red">+收入</li>
       </ul>
-      <Mycharts :recordData="this.groupedList" :nowTime.sync="todyTime" />
+      <Mycharts
+        :recordData="this.groupedList"
+        :nowTime.sync="todyTime"
+        :nowType.sync="type"
+      />
     </div>
-
     <div v-else class="Norecord">目前没有记录</div>
-    <ul v-if="this.groupedList.length > 0">
+
+    <!-- <ul v-if="this.groupedList.length > 0">
       <li v-for="(group, index) in groupedList" :key="index">
         <ol>
           <h3 class="title">
@@ -26,7 +30,7 @@
         </ol>
       </li>
     </ul>
-    <div v-else class="Norecord">目前没有记录</div>
+    <div v-else class="Norecord">目前没有记录</div> -->
   </layout>
 </template>
 
@@ -35,8 +39,7 @@ import vue from "vue";
 import Type from "../components/money/Type.vue";
 import Tabs from "../components/Tabs.vue";
 import Notes from "../components/money/Notes.vue";
-import { Component, Watch } from "vue-property-decorator";
-import intervalList from "../constants/intervalList";
+import { Component } from "vue-property-decorator";
 import typeList from "../constants/typeList";
 import dayjs from "dayjs";
 import clone from "../lib/clone";
@@ -48,28 +51,23 @@ import Mycharts from "../components/Mycharts.vue";
 export default class Statistics extends vue {
   type = "-";
   interval = "day";
-  // intervalList = intervalList;
   recordTypeList = typeList;
   todyTime = new Date().toISOString();
-  // @Watch("todyTime")
-  // onUpdateTime(newtime, oldtime) {
-  //   console.log("old");
-  //   console.log(oldtime);
-  //   console.log("new");
-  //   console.log(newtime);
-  //   console.log("todyTime");
-  //   console.log(this.todyTime);
-  // }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   tagsString(tags: Tag[]) {
     return tags.map((t) => t.name).join("，");
-    // return tags.join(",");
   }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   beforeCreate() {
     this.$store.commit("fetchRecords");
+    return;
   }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   get recordList() {
     return (this.$store.state as RootState).recordList;
   }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   get groupedList() {
     if (this.recordList.length === 0) {
       return [];
@@ -77,7 +75,8 @@ export default class Statistics extends vue {
     const newList = clone(this.recordList)
       .filter((t) => t.type === this.type)
       .sort((a, b) => {
-        dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
+        // dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
+        return dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
       });
 
     type Result = {
@@ -115,6 +114,7 @@ export default class Statistics extends vue {
     });
     return result;
   }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   beautify(stringTime: string) {
     const day = dayjs(stringTime);
     const now = dayjs();
@@ -164,6 +164,39 @@ export default class Statistics extends vue {
   margin-right: auto;
   margin-left: 16px;
   color: #999;
+}
+.dateChoose {
+  background-color: #ffffff;
+  margin-right: 20px;
+  margin-top: 20px;
+  height: 40px;
+  // border: 1px solid red;
+}
+::v-deep.dateChoose > input {
+  background-color: #ffffff;
+  height: 40px;
+}
+.incomeAndspending {
+  // border: 1px solid red;
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-around;
+  li {
+    display: block;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    box-shadow: 0 0 2px;
+    background-color: #ffffff;
+    // border: 1px solid blue;
+    &.red {
+      color: red;
+    }
+    &.green {
+      color: green;
+    }
+  }
 }
 </style>
 

@@ -29,5 +29,8 @@ module.exports = {
   ],
   globals: {
     __WebpackModuleApi: true,
+    Tag: true,
+    RootState: true,
+    RecordItem: true,
   },
 };

@@ -24,7 +24,7 @@
 <script lang="ts">
 import dayjs from "dayjs";
 import vue from "vue";
-import { Watch, Prop, Component } from "vue-property-decorator";
+import { Prop, Component } from "vue-property-decorator";
 
 @Component
 export default class Notes extends vue {
@@ -34,12 +34,6 @@ export default class Notes extends vue {
   @Prop(String) type?: string;
 
   Timestring(time: string) {
-    // console.log("1");
-    // console.log(dayjs(time).valueOf());
-    // console.log("2");
-    // console.log(dayjs(time).format("YYYY-MM-DD").valueOf());
-    // console.log("3");
-
     return dayjs(time).format("YYYY-MM-DD");
   }
   onValueChange(value: string) {
